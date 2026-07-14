@@ -7,12 +7,8 @@ import { FavouritesProvider } from '../providers/Favorities';
 import { Footer } from '../../modules/Footer';
 import { ProductsProvider } from '../providers/Products';
 import { AuthProvider } from '../providers/Auth/AuthContext';
-import { apiFromServer } from '@/api/apiFromServer';
 
 export const App: React.FC = () => {
-  // apiFromServer.getProductsServer().then((res) => {
-  //   console.log(res);
-  // })
   return (
     <>
       <AuthProvider>

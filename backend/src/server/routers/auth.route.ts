@@ -1,14 +1,7 @@
 import { Router, type Request, type Response } from 'express';
-import { randomUUID } from 'node:crypto';
-import {
-  usersTable,
-  type UserCreate,
-  type UserSelect,
-} from '../../db/schema/users.ts';
-import { db } from '../../db/db.ts';
+import { type UserSelect } from '../../db/schema/users.ts';
 import bcrypt from 'bcrypt';
 import { mailer } from '../../services/mailer.services.ts';
-import { eq } from 'drizzle-orm';
 import { validation } from '../../utils/validation.ts';
 import { jwtService } from '../../services/jwt.service.ts';
 import {
@@ -18,7 +11,7 @@ import {
 import cookieParser from 'cookie-parser';
 import { authMiddleware } from '../middlewares/auth.middleware.ts';
 
-export const authRoute = Router();
+export const authRoute: Router = Router();
 
 interface RegisterBody {
   email: string;

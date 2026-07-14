@@ -1,11 +1,14 @@
 {
   "name": "my-fullstack-project",
   "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "start:frontend": "npm run start --prefix frontend",
-    "start:backend": "npm run dev --prefix backend",
-    "setup:db": "npm run db:push --prefix backend && npm run db:seed --prefix backend",
-    "test": "npm run test --prefix backend && npm run test --prefix frontend"
+    "start:frontend": "npm run start --workspace frontend",
+    "start:backend": "npm run dev --workspace backend",
+    "setup:db": "npm run db:push --workspace backend && npm run db:seed --workspace backend",
+    "test": "npm run test --workspace backend && npm run test --workspace frontend"
   }
 }

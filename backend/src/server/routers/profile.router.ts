@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 import { mailer } from '../../services/mailer.services.ts';
 import { jwtService } from '../../services/jwt.service.ts';
 
-export const profileRoute = Router();
+export const profileRoute: Router = Router();
 
 profileRoute.post(
   '/change-name',
