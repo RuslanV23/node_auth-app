@@ -74,7 +74,7 @@ export const TopBar = ({
               >
                 <div
                   className={styles.iconProfile}
-                >{`${user.firstName[0]}.${user.firstName[0]}`}</div>
+                >{`${user.firstName[0]?.toUpperCase()}.${user.lastName[0]?.toUpperCase()}`}</div>
               </NavLink>
             ) : (
               <NavLink
@@ -122,7 +122,7 @@ export const TopBar = ({
               >
                 <div
                   className={styles.iconProfile}
-                >{`${user.firstName[0]}.${user.firstName[0]}`}</div>
+                >{`${user.firstName[0]?.toUpperCase()}.${user.lastName[0]?.toUpperCase()}`}</div>
               </NavLink>
             ) : (
               <NavLink

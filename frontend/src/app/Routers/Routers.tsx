@@ -12,6 +12,8 @@ import { ActivationPage } from '@/modules/ActivationPage/ActivationPage';
 import { RequireAuth } from '@/components/RequireAuth/RequireAuth';
 import { ProfilePage } from '@/modules/ProfilePage/ProfilePage';
 import { ResetEmailPage } from '@/modules/ResetEmailPage/ResetEmailPage';
+import { RequireNonAuth } from '@/components/RequireNonAuth/RequireNonAuth';
+import { ResetPasswordPage } from '@/modules/ResetPassword/ResetPasswordPage';
 
 export const Routers = () => {
   return (
@@ -40,9 +42,14 @@ export const Routers = () => {
             <Route path=":productId" element={<ProductDetailsPage category="accessories" />} />
           </Route>
 
-          <Route path="login" element={<AuthPage mode={'login'} />} />
-          <Route path="forget" element={<AuthPage mode={'forget'} />} />
-          <Route path="register" element={<AuthPage mode={'register'} />} />
+          <Route path="/" element={<RequireNonAuth />}>
+            <Route path="login" element={<AuthPage mode={'login'} />} />
+            <Route path="forget" element={<AuthPage mode={'forget'} />} />
+            <Route path="register" element={<AuthPage mode={'register'} />} />
+          </Route>
+
+          <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+
           <Route path="activation/:activationToken" element={<ActivationPage />} />
           <Route path="change-email/confirm/:token" element={<ResetEmailPage />} />
           <Route

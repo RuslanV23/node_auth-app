@@ -13,6 +13,122 @@ export const en = {
     cell: 'Cell',
   },
 
+  authPage: {
+    login: {
+      title: 'Sign In',
+      buttonText: 'Log In',
+      fields: {
+        email: 'Email',
+        password: 'Password',
+      },
+    },
+    register: {
+      title: 'Sign Up',
+      buttonText: 'Sign Up',
+      fields: {
+        firstName: 'First name',
+        lastName: 'Last name',
+        email: 'Email',
+        password: 'Password',
+      },
+    },
+
+    forget: {
+      title: 'Reset Password',
+      buttonText: 'Send reset link',
+      fields: {
+        email: 'Email',
+      },
+    },
+
+    links: {
+      register: "Don't have an account? Sign up",
+      forget: 'Forgot the password?',
+      login: 'Already have an account? Log in',
+    },
+
+    successSubmitRegister: 'An activation email has been sent to you.',
+    successSubmitForget:
+      'You have been sent a letter to the email address for changing the password',
+  },
+
+  resetPasswordPage: {
+    title: 'Reset password',
+    fields: {
+      newPassword: {
+        label: 'New password',
+        placeholder: 'Enter new password',
+      },
+      confirmNewPassword: {
+        label: 'Confirm new password',
+        placeholder: 'Enter confirm new password',
+      },
+    },
+
+    success: 'password updated successfully',
+  },
+
+  profilePage: {
+    title: 'Profile',
+    paragraph: 'Manage your personal information and account settings',
+    formAccount: {
+      title: 'Account information',
+      fields: {
+        firstName: 'First name',
+        lastName: 'Last name',
+      },
+
+      button: 'Save changes',
+    },
+
+    formChangePassword: {
+      title: 'Change password',
+      paragraph: 'Choose a strong password to keep your account secure.',
+      fields: {
+        currentPassword: {
+          label: 'Current password',
+          placeholder: 'Enter current password',
+        },
+        newPassword: {
+          label: 'New password',
+          placeholder: 'Enter new password',
+        },
+        confirmNewPassword: {
+          label: 'Confirm new password',
+          placeholder: 'Enter confirm new password',
+        },
+      },
+
+      button: 'Update password',
+    },
+
+    formChangeEmail: {
+      title: 'Change email',
+      paragraph: 'To change your email, enter your password and comfirm your new email.',
+      fields: {
+        currentPassword: {
+          label: 'Current password',
+          placeholder: 'Enter current password',
+        },
+        newEmail: {
+          label: 'New email',
+          placeholder: 'Enter new email',
+        },
+      },
+
+      warning: 'A confirmation link will be send to your new email.',
+
+      button: 'Send confirmation email',
+    },
+
+    accountLogout: {
+      title: 'Account',
+      paragraph: 'Log out from your account on this device.',
+
+      button: 'Log out',
+    },
+  },
+
   HomeTitle: {
     welcome: 'Welcome to Nice Gadgets store!',
     hotPrice: 'Hot prices',

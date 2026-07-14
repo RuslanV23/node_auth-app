@@ -35,14 +35,14 @@ function activationTokenVerify(
 }
 
 function resetEmailTokenSign(user: NormalizedUser & { newEmail: string }) {
-  const JWT_ACTIVATION_SECRET = process.env.JWT_ACTIVATION_SECRET;
+  const JWT_RESET_EMAIL_SECRET = process.env.JWT_RESET_EMAIL_SECRET;
 
-  if (!JWT_ACTIVATION_SECRET) {
+  if (!JWT_RESET_EMAIL_SECRET) {
     console.error('Not found JWT_ACTIVATION_SECRET');
     throw new Error('Not found JWT_ACTIVATION_SECRET');
   }
 
-  return jwt.sign(user, JWT_ACTIVATION_SECRET, {
+  return jwt.sign(user, JWT_RESET_EMAIL_SECRET, {
     expiresIn: '30min',
   });
 }
@@ -50,14 +50,49 @@ function resetEmailTokenSign(user: NormalizedUser & { newEmail: string }) {
 function resetEmailTokenVerify(
   token: string,
 ): (JwtPayload & NormalizedUser & { newEmail: string }) | null {
-  const JWT_ACTIVATION_SECRET = process.env.JWT_ACTIVATION_SECRET;
+  const JWT_RESET_EMAIL_SECRET = process.env.JWT_RESET_EMAIL_SECRET;
 
-  if (!JWT_ACTIVATION_SECRET) {
+  if (!JWT_RESET_EMAIL_SECRET) {
     console.error('Not found JWT_ACTIVATION_SECRET');
     return null;
   }
   try {
-    const payload = jwt.verify(token, JWT_ACTIVATION_SECRET);
+    const payload = jwt.verify(token, JWT_RESET_EMAIL_SECRET);
+
+    if (typeof payload === 'string') {
+      return null;
+    }
+
+    return payload as JwtPayload & NormalizedUser & { newEmail: string };
+  } catch (e) {
+    return null;
+  }
+}
+
+function resetPasswordTokenSign(user: NormalizedUser) {
+  const JWT_RESET_PASSWORD_SECRET = process.env.JWT_RESET_PASSWORD_SECRET;
+
+  if (!JWT_RESET_PASSWORD_SECRET) {
+    console.error('Not found JWT_ACTIVATION_SECRET');
+    throw new Error('Not found JWT_ACTIVATION_SECRET');
+  }
+
+  return jwt.sign(user, JWT_RESET_PASSWORD_SECRET, {
+    expiresIn: '30min',
+  });
+}
+
+function resetPasswordTokenVerify(
+  token: string,
+): (JwtPayload & NormalizedUser) | null {
+  const JWT_RESET_PASSWORD_SECRET = process.env.JWT_RESET_PASSWORD_SECRET;
+
+  if (!JWT_RESET_PASSWORD_SECRET) {
+    console.error('Not found JWT_ACTIVATION_SECRET');
+    return null;
+  }
+  try {
+    const payload = jwt.verify(token, JWT_RESET_PASSWORD_SECRET);
 
     if (typeof payload === 'string') {
       return null;
@@ -140,4 +175,5 @@ export const jwtService = {
   accessToken: { verify: accessTokenVerify, sign: accessTokenSign },
   refreshToken: { verify: refreshTokenVerify, sign: refreshTokenSign },
   resetEmailToken: { verify: resetEmailTokenVerify, sign: resetEmailTokenSign },
+  resetPasswordToken: {verify: resetPasswordTokenVerify, sign: resetPasswordTokenSign}
 };

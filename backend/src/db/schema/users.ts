@@ -23,7 +23,7 @@ export const usersTable = storeData.table('users', {
   role: userRoleEnum().default('user').notNull(),
   password: text().notNull(),
   activationToken: text('activation_token'),
-  resetToken: text('reset_token'),
+  resetPasswordToken: text('reset_password_token'),
   isActivated: boolean('is_activated').notNull().default(false),
   refreshToken: text('refresh_token'),
   resetEmailToken: text('reset_email_token'),

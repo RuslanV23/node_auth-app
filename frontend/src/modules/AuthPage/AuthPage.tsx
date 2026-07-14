@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 
 import styles from './styles.module.scss';
@@ -9,6 +10,7 @@ import { usePageError } from '../hooks/useErrorPage';
 import { useAuthContext } from '@/app/providers/Auth/AuthContext';
 import { Loading } from '@/components/Loading/Loading';
 import { validation } from '@/shared/validation';
+import { useTranslation } from 'react-i18next';
 
 type Mode = 'login' | 'register' | 'forget';
 
@@ -28,8 +30,6 @@ type AuthConfig = {
   buttonText: string;
   fields: Field[];
 };
-
-
 
 const authConfig: Record<Mode, AuthConfig> = {
   login: {
@@ -102,7 +102,7 @@ const authConfig: Record<Mode, AuthConfig> = {
     buttonText: 'Send reset link',
     fields: [
       {
-        id: 'forgetEmail',
+        id: 'forgetPassword',
         label: 'Email',
         name: 'email',
         type: 'email',
@@ -115,6 +115,7 @@ const authConfig: Record<Mode, AuthConfig> = {
 
 export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
   const config = authConfig[mode];
+  const { t } = useTranslation();
   const location = useLocation();
   const [pageError, setPageError] = usePageError('');
   const [successSumbit, setSuccessSumbit] = useState<Mode | undefined>(undefined);
@@ -128,7 +129,7 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
         return (
           <main className={styles.container}>
             <div className={styles.box}>
-              <h3>An activation email has been sent to you.</h3>
+              <h3>{t('authPage.successSubmitRegister')}</h3>
             </div>
           </main>
         );
@@ -137,7 +138,7 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
         return (
           <main className={styles.container}>
             <div className={styles.box}>
-              <h3>You have been sent a letter to the email address for changing the password</h3>
+              <h3>{t('authPage.successSubmitForget')}</h3>
             </div>
           </main>
         );
@@ -153,7 +154,7 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
   return (
     <main className={styles.container}>
       <div className={styles.box}>
-        <h1>{config.title}</h1>
+        <h1>{t(`authPage.${mode}.title` as any)}</h1>
         <Formik
           validateOnBlur={false}
           validateOnChange={false}
@@ -203,6 +204,11 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
                 break;
 
               case 'forget':
+                handle(() =>
+                  authService.forgetPassword(
+                    values as Parameters<typeof authService.forgetPassword>[0],
+                  ),
+                );
                 break;
 
               default:
@@ -212,16 +218,15 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
         >
           {({ setFieldError, handleChange, isSubmitting }) => {
             return (
-              <Form noValidate className={styles.form} action={config.action}>
+              <Form noValidate className={styles.form}>
                 {config.fields.map((field) => (
                   <div className={styles.field} key={field.id}>
                     <label className={styles.label} htmlFor={field.id}>
-                      {field.label}
+                      {t(`authPage.${mode}.fields.${field.name}` as any)}
                     </label>
                     <Field
                       validate
                       {...field}
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       onChange={(e: React.ChangeEvent<any>) => {
                         handleChange(e);
                         setFieldError(field.name, undefined);
@@ -234,7 +239,11 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
                 ))}
 
                 <ButtonThird disabled={isSubmitting} type="submit" className={styles.button}>
-                  {isSubmitting ? <Loading width={32} height={32}></Loading> : config.buttonText}
+                  {isSubmitting ? (
+                    <Loading width={32} height={32}></Loading>
+                  ) : (
+                    t(`authPage.${mode}.buttonText` as any)
+                  )}
                 </ButtonThird>
               </Form>
             );
@@ -246,11 +255,11 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
           {mode === 'login' && (
             <>
               <Link to="/register" className={styles.linkRegister}>
-                Don&apos;t have an account? Sign up
+                {t('authPage.links.register')}
               </Link>
 
               <Link to="/forget" className={styles.linkRegister}>
-                Forgot the password?
+                {t('authPage.links.forget')}
               </Link>
             </>
           )}
@@ -258,10 +267,10 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
           {mode === 'register' && (
             <>
               <Link to="/login" className={styles.linkRegister}>
-                Already have an account? Log in
+                {t('authPage.links.login')}
               </Link>
               <Link to="/forget" className={styles.linkRegister}>
-                Forgot the password?
+                {t('authPage.links.forget')}
               </Link>
             </>
           )}
@@ -269,11 +278,11 @@ export const AuthPage: React.FC<{ mode: Mode }> = ({ mode }) => {
           {mode === 'forget' && (
             <>
               <Link to="/login" className={styles.linkRegister}>
-                Already have an account? Log in
+                {t('authPage.links.login')}
               </Link>
 
               <Link to="/register" className={styles.linkRegister}>
-                Don&apos;t have an account? Sign up
+                {t('authPage.links.register')}
               </Link>
             </>
           )}

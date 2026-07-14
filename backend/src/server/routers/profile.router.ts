@@ -114,7 +114,7 @@ profileRoute.post(
     });
 
     await userService.update(userByEmail.id, { resetEmailToken });
-    await mailer.sendActivationToken(newEmail, resetEmailToken);
+    await mailer.sendResetEmailToken(newEmail, resetEmailToken);
 
     res.send({
       message: 'An activation email has been sent to a new email address.',

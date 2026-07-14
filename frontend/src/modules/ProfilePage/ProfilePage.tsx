@@ -9,8 +9,10 @@ import { apiProfile } from '@/api/profile';
 import { useNotification } from './components/useNotification';
 import { validation } from '@/shared/validation';
 import { submitWithBackendErrors } from './helpers/submitWithBackendErrors';
+import { useTranslation } from 'react-i18next';
 
 export const ProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const { user, logout, checkAuth } = useAuthContext();
 
   const [nameNotification, setNameNotification] = useNotification();
@@ -24,8 +26,8 @@ export const ProfilePage: React.FC = () => {
   return (
     <main className={styles.container}>
       <div className={styles.content}>
-        <h2 className={styles.title}>Profile</h2>
-        <p>Manage your personal information and account settings</p>
+        <h2 className={styles.title}>{t('profilePage.title')}</h2>
+        <p>{t('profilePage.paragraph')}</p>
 
         <div className={styles.formContainer}>
           <div className={styles.colomn1}>
@@ -50,11 +52,11 @@ export const ProfilePage: React.FC = () => {
                 return (
                   <Form noValidate className={styles.form} action="">
                     <div className={styles.formInfo}>
-                      <h3>Account information</h3>
+                      <h3>{t('profilePage.formAccount.title')}</h3>
                     </div>
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="account:firstName">
-                        First name
+                        {t('profilePage.formAccount.fields.firstName')}
                       </label>
                       <Field
                         validate={validation.validateName}
@@ -72,7 +74,7 @@ export const ProfilePage: React.FC = () => {
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="account:lastName">
-                        Last name
+                        {t('profilePage.formAccount.fields.lastName')}
                       </label>
                       <Field
                         validate={validation.validateName}
@@ -101,7 +103,7 @@ export const ProfilePage: React.FC = () => {
                       selected={false}
                       style={{ animation: 'none' }}
                     >
-                      Save changes
+                      {t('profilePage.formAccount.button')}
                     </ButtonBuy>
                   </Form>
                 );
@@ -129,19 +131,21 @@ export const ProfilePage: React.FC = () => {
                 return (
                   <Form noValidate className={styles.form} action="">
                     <div className={styles.formInfo}>
-                      <h3>Change email</h3>
-                      <p>To change your email, enter your password and comfirm your new email.</p>
+                      <h3>{t('profilePage.formChangeEmail.title')}</h3>
+                      <p>{t('profilePage.formChangeEmail.paragraph')}</p>
                     </div>
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="changeEmailCurrentPassword">
-                        Current password
+                        {t('profilePage.formChangeEmail.fields.currentPassword.label')}
                       </label>
                       <Field
                         type="password"
                         name="currentPassword"
                         id="changeEmailCurrentPassword"
-                        placeholder="Enter current password"
+                        placeholder={t(
+                          'profilePage.formChangeEmail.fields.currentPassword.placeholder',
+                        )}
                         validate={validation.validatePassword}
                         className={styles.input}
                       />
@@ -154,13 +158,13 @@ export const ProfilePage: React.FC = () => {
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="changeEmailnewEmail">
-                        New email
+                        {t('profilePage.formChangeEmail.fields.newEmail.label')}
                       </label>
                       <Field
                         type="email"
                         name="newEmail"
                         id="changeEmailnewEmail"
-                        placeholder="Enter new email"
+                        placeholder={t('profilePage.formChangeEmail.fields.newEmail.placeholder')}
                         validate={validation.validateEmail}
                         className={styles.input}
                       />
@@ -174,8 +178,8 @@ export const ProfilePage: React.FC = () => {
                       <div className={styles.successNotification}>{emailNotification.success}</div>
                     )}
                     <div className={styles.warning}>
-                      <Icon className={styles.iconWarning} type="warning"></Icon>A confirmation link
-                      will be send to your new email.
+                      <Icon className={styles.iconWarning} type="warning"></Icon>
+                      {t('profilePage.formChangeEmail.warning')}
                     </div>
 
                     <ButtonBuy
@@ -185,7 +189,7 @@ export const ProfilePage: React.FC = () => {
                       selected={false}
                       style={{ animation: 'none' }}
                     >
-                      Send comfirmation email
+                      {t('profilePage.formChangeEmail.button')}
                     </ButtonBuy>
                   </Form>
                 );
@@ -200,6 +204,7 @@ export const ProfilePage: React.FC = () => {
                   formHelper.setErrors({
                     confirmNewPassword: 'Confirm new password is not correct',
                   });
+                  formHelper.setSubmitting(false);
                   return;
                 }
 
@@ -207,6 +212,7 @@ export const ProfilePage: React.FC = () => {
                   formHelper.setErrors({
                     newPassword: 'New password must be different from current password',
                   });
+                  formHelper.setSubmitting(false);
                   return;
                 }
 
@@ -226,20 +232,22 @@ export const ProfilePage: React.FC = () => {
                 return (
                   <Form noValidate className={styles.form} action="">
                     <div className={styles.formInfo}>
-                      <h3>Change password</h3>
-                      <p>choose a strong password to keep your account secure.</p>
+                      <h3>{t('profilePage.formChangePassword.title')}</h3>
+                      <p>{t('profilePage.formChangePassword.paragraph')}</p>
                     </div>
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="changePasswordCurrentPassword">
-                        Current password
+                        {t('profilePage.formChangePassword.fields.currentPassword.label')}
                       </label>
                       <Field
                         validate={validation.validatePassword}
                         type="password"
                         name="currentPassword"
                         id="changePasswordCurrentPassword"
-                        placeholder="Enter current password"
+                        placeholder={t(
+                          'profilePage.formChangePassword.fields.currentPassword.placeholder',
+                        )}
                         className={styles.input}
                       />
                       <ErrorMessage
@@ -251,14 +259,16 @@ export const ProfilePage: React.FC = () => {
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="changePasswordNewPassword">
-                        New password
+                        {t('profilePage.formChangePassword.fields.newPassword.label')}
                       </label>
                       <Field
                         validate={validation.validatePassword}
                         type="password"
                         name="newPassword"
                         id="changePasswordNewPassword"
-                        placeholder="Enter new password"
+                        placeholder={t(
+                          'profilePage.formChangePassword.fields.newPassword.placeholder',
+                        )}
                         className={styles.input}
                       />
                       <ErrorMessage
@@ -270,14 +280,16 @@ export const ProfilePage: React.FC = () => {
 
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="changePasswordConfirmNewPassword">
-                        Confirm new password
+                        {t('profilePage.formChangePassword.fields.confirmNewPassword.label')}
                       </label>
                       <Field
                         validate={validation.validatePassword}
                         type="password"
                         name="confirmNewPassword"
                         id="changePasswordConfirmNewPassword"
-                        placeholder="Enter confirm new password"
+                        placeholder={t(
+                          'profilePage.formChangePassword.fields.confirmNewPassword.placeholder',
+                        )}
                         className={styles.input}
                       />
                       <ErrorMessage
@@ -302,7 +314,7 @@ export const ProfilePage: React.FC = () => {
                       selected={false}
                       style={{ animation: 'none' }}
                     >
-                      Update password
+                      {t('profilePage.formChangePassword.button')}
                     </ButtonBuy>
                   </Form>
                 );
@@ -310,12 +322,12 @@ export const ProfilePage: React.FC = () => {
             </Formik>
             <div className={styles.form}>
               <div className={styles.formInfo}>
-                <h3>Account</h3>
-                <p>Log out from your account on this device.</p>
+                <h3>{t('profilePage.accountLogout.title')}</h3>
+                <p>{t('profilePage.accountLogout.paragraph')}</p>
               </div>
 
               <button className={styles.buttonLogout} onClick={() => logout()}>
-                Log out
+                {t('profilePage.accountLogout.button')}
               </button>
             </div>
           </div>

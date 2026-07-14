@@ -26,7 +26,7 @@ async function send(to: string, subject: string, html: string) {
 async function sendActivationToken(to: string, token: string) {
   if (!process.env.CLIENT_HOST || !process.env.CLIENT_BASE_PATH) {
     console.error(
-      'In function sendActivationToken does not process.env.CLIENT_HOST or process.env.CLIENT_BASE_PATH',
+      'In function does not process.env.CLIENT_HOST or process.env.CLIENT_BASE_PATH',
     );
     return;
   }
@@ -35,4 +35,32 @@ async function sendActivationToken(to: string, token: string) {
   return send(to, 'Activation email', html);
 }
 
-export const mailer = { sendActivationToken };
+async function sendResetEmailToken(to: string, token: string) {
+  if (!process.env.CLIENT_HOST || !process.env.CLIENT_BASE_PATH) {
+    console.error(
+      'In function does not process.env.CLIENT_HOST or process.env.CLIENT_BASE_PATH',
+    );
+    return;
+  }
+
+  const html = `<a href=${process.env.CLIENT_HOST + process.env.CLIENT_BASE_PATH + 'change-email/confirm/' + token}>Reset email link</a>`;
+  return send(to, 'Reset email', html);
+}
+
+async function sendForgotPasswordToken(to: string, token: string) {
+  if (!process.env.CLIENT_HOST || !process.env.CLIENT_BASE_PATH) {
+    console.error(
+      'In function does not process.env.CLIENT_HOST or process.env.CLIENT_BASE_PATH',
+    );
+    return;
+  }
+
+  const html = `<a href=${process.env.CLIENT_HOST + process.env.CLIENT_BASE_PATH + 'reset-password/' + token}>Reset password link</a>`;
+  return send(to, 'Reset password', html);
+}
+
+export const mailer = {
+  sendActivationToken,
+  sendResetEmailToken,
+  sendForgotPasswordToken,
+};

@@ -232,6 +232,109 @@ authRoute.get('/refresh', cookieParser(), async (req, res) => {
   return sendAuthentication(res, user);
 });
 
+authRoute.post(
+  '/forget-password',
+  async (req: Request<{}, {}, { email?: string }>, res) => {
+    const { email: reqEmail } = req.body;
+
+    if (!reqEmail) {
+      return res.sendStatus(400);
+    }
+
+    console.log(req.body);
+
+    const error = validation.validateEmail(reqEmail);
+
+    if (error) {
+      return res.status(400).send({ error: { email: error } });
+    }
+
+    const user = await userService.getByEmail(reqEmail);
+
+    if (user) {
+      const token = await jwtService.resetPasswordToken.sign(
+        userService.normalize(user),
+      );
+      await userService.update(user.id, { resetPasswordToken: token });
+
+      await mailer.sendForgotPasswordToken(reqEmail, token);
+    }
+
+    res.send({ message: 'A recovery link was sent to your email.' });
+  },
+);
+
+authRoute.post(
+  '/reset-password',
+  async (
+    req: Request<
+      {},
+      {},
+      { newPassword?: string; newPasswordConfirm: string; token: string }
+    >,
+    res,
+  ) => {
+    const { newPassword, newPasswordConfirm, token } = req.body;
+
+    if (!newPassword || !newPasswordConfirm || !token) {
+      return res.sendStatus(400);
+    }
+
+    const errorValidations = Object.fromEntries(
+      Object.entries({
+        newPassword: validation.validatePassword(newPassword),
+        newPasswordConfirm: validation.validatePassword(newPasswordConfirm),
+      }).filter(([, value]) => value !== undefined),
+    );
+
+    if (Object.keys(errorValidations).length > 0) {
+      return res.status(400).json({
+        message: 'Any field is invalid',
+        errors: errorValidations,
+      });
+    }
+
+    if (newPassword !== newPasswordConfirm) {
+      return res.status(400).json({
+        message: 'Any field is invalid',
+        errors: {
+          newPasswordConfirm: 'Confirm password does not match the password',
+        },
+      });
+    }
+
+    const payload = jwtService.resetPasswordToken.verify(token);
+    console.log(payload);
+
+    if (!payload) {
+      return res.status(400).json({
+        message: 'Token is not valid',
+      });
+    }
+
+    const user = await userService.getById(payload.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'Not found user',
+      });
+    }
+
+
+    if (user.resetPasswordToken !== token) {
+      return res.status(400).json({
+        message: 'Token is not valid',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await userService.update(user.id, { resetPasswordToken: null, password: hashedPassword });
+
+    res.send({ message: 'Password is updated' });
+  },
+);
+
 type ActivationParams = {
   activationToken: string;
 };
@@ -272,6 +375,6 @@ authRoute.get(
       isActivated: true,
     });
 
-    res.send({message: 'User is activated'});
+    res.send({ message: 'User is activated' });
   },
 );
