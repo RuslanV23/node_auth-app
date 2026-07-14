@@ -175,5 +175,8 @@ export const jwtService = {
   accessToken: { verify: accessTokenVerify, sign: accessTokenSign },
   refreshToken: { verify: refreshTokenVerify, sign: refreshTokenSign },
   resetEmailToken: { verify: resetEmailTokenVerify, sign: resetEmailTokenSign },
-  resetPasswordToken: {verify: resetPasswordTokenVerify, sign: resetPasswordTokenSign}
+  resetPasswordToken: {
+    verify: resetPasswordTokenVerify,
+    sign: resetPasswordTokenSign,
+  },
 };

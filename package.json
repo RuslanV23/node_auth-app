@@ -5,6 +5,7 @@
     "install:all": "npm install --prefix backend && npm install --prefix frontend",
     "start:frontend": "npm run start --prefix frontend",
     "start:backend": "npm run dev --prefix backend",
-    "setup:db": "npm run db:push --prefix backend && npm run db:seed --prefix backend"
+    "setup:db": "npm run db:push --prefix backend && npm run db:seed --prefix backend",
+    "test": "npm run test --prefix backend && npm run test --prefix frontend"
   }
 }

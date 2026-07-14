@@ -320,16 +320,18 @@ authRoute.post(
       });
     }
 
-
     if (user.resetPasswordToken !== token) {
       return res.status(400).json({
         message: 'Token is not valid',
       });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10)
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await userService.update(user.id, { resetPasswordToken: null, password: hashedPassword });
+    await userService.update(user.id, {
+      resetPasswordToken: null,
+      password: hashedPassword,
+    });
 
     res.send({ message: 'Password is updated' });
   },
